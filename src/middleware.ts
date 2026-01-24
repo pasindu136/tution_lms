@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-export async function middleware(request) {
+export async function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
     const { pathname } = request.nextUrl;
 
@@ -36,7 +37,7 @@ export async function middleware(request) {
         const { payload } = await jwtVerify(token, secret);
 
         // Role based protection
-        if (pathname.startsWith('/dashboard') && !['admin', 'teacher'].includes(payload.role)) {
+        if (pathname.startsWith('/dashboard') && !['admin', 'teacher'].includes(payload.role as string)) {
             return NextResponse.redirect(new URL('/student/videos', request.url));
         }
 
@@ -46,8 +47,8 @@ export async function middleware(request) {
         }
 
         const requestHeaders = new Headers(request.headers);
-        requestHeaders.set('x-user-id', payload.userId);
-        requestHeaders.set('x-user-role', payload.role);
+        requestHeaders.set('x-user-id', payload.userId as string);
+        requestHeaders.set('x-user-role', payload.role as string);
 
         return NextResponse.next({
             request: {

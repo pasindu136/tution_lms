@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
-import { BookOpen, Package, Search, Filter } from 'lucide-react';
+import { BookOpen, Package, Search, Filter, PlayCircle, Clock } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import LogoutButton from '@/components/LogoutButton';
@@ -21,72 +21,88 @@ export default async function StudentDashboard() {
     })) || [];
 
     return (
-        <div className="min-h-screen relative flex flex-col">
-            <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950"></div>
+        <div className="min-h-screen relative flex flex-col bg-slate-950">
+
+            {/* Subtle Background Pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
 
             <nav className="sticky top-0 z-50 glass border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20">
-                            <BookOpen className="w-5 h-5 text-white" />
+                        <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-white">
+                            <span className="text-blue-500">APEX</span> LMS
                         </div>
-                        <span className="font-bold text-lg hidden sm:block">My Library</span>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="hidden md:flex items-center px-4 py-1.5 rounded-full bg-slate-900/50 border border-slate-700/50 text-sm text-slate-400">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
-                            Active Student
-                        </div>
-                        <div className="h-6 w-px bg-slate-700/50"></div>
                         <div className="text-right mr-2 hidden sm:block">
                             <p className="text-sm font-semibold text-white leading-tight">{user.name}</p>
-                            <p className="text-xs text-slate-400">Student</p>
+                            <p className="text-xs text-slate-400">Student ID: {user.userId?.substring(0, 8)}</p>
                         </div>
-                        <LogoutButton className="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-full transition-colors" />
+                        <LogoutButton className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:text-white" />
                     </div>
                 </div>
             </nav>
 
-            <main className="flex-1 max-w-7xl mx-auto w-full p-6 lg:p-10">
+            <main className="flex-1 max-w-7xl mx-auto w-full p-6 lg:p-10 relative z-10">
 
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                {/* Modern Header */}
+                <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-white/10 rounded-3xl p-8 mb-12 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-sm">
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Welcome Back, <span className="text-blue-400">{user.name.split(' ')[0]}</span> 👋</h1>
-                        <p className="text-slate-400">You have access to <span className="text-white font-semibold">{myPacks.length}</span> course packs.</p>
+                        <h1 className="text-3xl font-bold text-white mb-2">My Classrooms</h1>
+                        <p className="text-blue-200/80">Access your Theory, Revision, and Paper class materials here.</p>
+                    </div>
+                    <div className="bg-white/10 px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-md">
+                        <span className="block text-2xl font-bold text-white text-center">{myPacks.length}</span>
+                        <span className="text-xs text-blue-200 uppercase tracking-wider font-semibold">Active Courses</span>
                     </div>
                 </div>
 
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <Package className="w-5 h-5 text-blue-500" />
+                    Your Enrolled Batches
+                </h2>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {myPacks.length === 0 ? (
-                        <div className="col-span-full flex flex-col items-center justify-center py-20 text-slate-500 border border-dashed border-slate-800 rounded-3xl">
-                            <Package className="w-16 h-16 mb-4 opacity-20" />
-                            <p className="text-lg">No courses assigned to you yet.</p>
-                            <p className="text-sm">Please contact your teacher to enroll.</p>
+                        <div className="col-span-full flex flex-col items-center justify-center py-24 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
+                            <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-4">
+                                <BookOpen className="w-10 h-10 text-slate-600" />
+                            </div>
+                            <p className="text-xl font-medium text-white mb-2">No Classes Assigned</p>
+                            <p className="text-sm">Contact the hotline (077 123 4567) to activate your account.</p>
                         </div>
                     ) : (
                         myPacks.map((pack) => (
                             <Link href={`/student/packs/${pack.id}`} key={pack.id} className="group">
-                                <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden glass-card h-full p-6 hover:border-blue-500/30 transition-all">
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
-                                            <Package className="w-8 h-8" />
+                                <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden glass-card h-full flex flex-col hover:border-blue-500/50 transition-all duration-300">
+                                    {/* Decorative Banner */}
+                                    <div className="h-24 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
+                                        <div className="absolute bottom-4 left-4 p-2 bg-slate-900/90 backdrop-blur-md rounded-lg border border-white/10">
+                                            <Package className="w-6 h-6 text-blue-400" />
                                         </div>
-                                        <span className="px-3 py-1 bg-slate-800 rounded-full text-xs font-medium text-slate-400 border border-slate-700">
-                                            {pack.video_count} Lessons
-                                        </span>
                                     </div>
 
-                                    <h3 className="font-bold text-white text-xl mb-3 group-hover:text-blue-400 transition-colors">
-                                        {pack.title}
-                                    </h3>
+                                    <div className="p-6 flex-1 flex flex-col">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h3 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-1">
+                                                {pack.title}
+                                            </h3>
+                                        </div>
 
-                                    <p className="text-sm text-slate-400 line-clamp-3 mb-6">
-                                        {pack.description}
-                                    </p>
+                                        <p className="text-sm text-slate-400 line-clamp-2 mb-6 h-10">
+                                            {pack.description || "Comprehensive syllabus coverage and advanced revision materials."}
+                                        </p>
 
-                                    <div className="flex items-center text-blue-400 text-sm font-bold group-hover:translate-x-1 transition-transform">
-                                        View Content →
+                                        <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-800">
+                                            <span className="text-xs font-medium text-slate-500 bg-slate-900 px-2 py-1 rounded border border-slate-800">
+                                                {pack.video_count} Lessons
+                                            </span>
+                                            <span className="text-sm font-bold text-blue-500 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                                Enter Class <ArrowRight className="w-4 h-4" />
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>

@@ -1,17 +1,22 @@
-import '../styles/globals.css';
-import { Inter } from 'next/font/google';
+import '@/styles/globals.css';
+import { Inter } from "next/font/google";
+import { ThemeProvider } from '@/context/ThemeContext';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: 'LMS Portal',
-    description: 'Learning Management System for Online Education',
+    title: "APEX Institute - Educational Platform",
+    description: "Sri Lanka's Premium Learning Management System",
 };
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en">
-            <body className={`${inter.className} bg-slate-900 text-white min-h-screen`}>{children}</body>
+        <html lang="en" className="scroll-smooth">
+            <body className={inter.className}>
+                <ThemeProvider>
+                    {children}
+                </ThemeProvider>
+            </body>
         </html>
     );
 }
