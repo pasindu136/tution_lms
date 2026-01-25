@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
-import { BookOpen, Package, Search, Filter, PlayCircle, Clock } from 'lucide-react';
+import { BookOpen, Package, Search, Filter, PlayCircle, Clock, ArrowRight } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import LogoutButton from '@/components/LogoutButton';
@@ -9,32 +9,48 @@ export default async function StudentDashboard() {
     const user = await getCurrentUser();
     if (!user) redirect('/login');
 
-    // Fetch Packs assigned to this student
+    // 1. Fetch Packs assigned to this student
     let myPacks = [];
     let errorMsg = null;
 
     try {
-        const { data: assignments, error } = await supabase
+        // Step A: Get assigned pack IDs from student_packs table
+        const { data: assignments, error: assignmentError } = await supabase
             .from('student_packs')
-            .select('pack_id, video_packs(id, title, description, created_at, pack_videos(count))')
+            .select('pack_id')
             .eq('user_email', user.email);
 
-        if (error) {
-            console.error('Error fetching packs:', error);
-            errorMsg = error.message;
-        } else {
-            myPacks = assignments?.map(a => {
-                // Safety check: if video_packs is null (e.g., pack deleted), skip it
-                if (!a.video_packs) return null;
-                return {
-                    ...a.video_packs,
-                    video_count: a.video_packs.pack_videos?.[0]?.count || 0
-                };
-            }).filter(Boolean) || [];
+        if (assignmentError) {
+            console.error('Error fetching student assignments:', JSON.stringify(assignmentError, null, 2));
+            throw new Error('Failed to load your class assignments.');
         }
+
+        const packIds = assignments?.map(a => a.pack_id).filter(Boolean) || [];
+
+        if (packIds.length > 0) {
+            // Step B: Fetch details for these packs from video_packs table
+            // We select pack_videos(count) to show number of videos. 
+            // If this count fails, we can remove it, but usually it works if relations exist.
+            const { data: packsData, error: packsError } = await supabase
+                .from('video_packs')
+                .select('id, title, description, created_at, pack_videos(count)')
+                .in('id', packIds);
+
+            if (packsError) {
+                console.error('Error fetching pack details:', JSON.stringify(packsError, null, 2));
+                throw new Error('Failed to load class details.');
+            }
+
+            // Step C: Format data
+            myPacks = packsData?.map(pack => ({
+                ...pack,
+                video_count: pack.pack_videos?.[0]?.count || 0
+            })) || [];
+        }
+
     } catch (err) {
-        console.error('Unexpected error:', err);
-        errorMsg = err.message;
+        console.error('Dashboard Data Load Error:', err);
+        errorMsg = err.message || "An unexpected error occurred.";
     }
 
     return (
