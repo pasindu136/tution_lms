@@ -15,10 +15,14 @@ export default async function StudentDashboard() {
         .select('pack_id, video_packs(id, title, description, created_at, pack_videos(count))')
         .eq('user_email', user.email);
 
-    const myPacks = assignments?.map(a => ({
-        ...a.video_packs,
-        video_count: a.video_packs.pack_videos?.[0]?.count || 0
-    })) || [];
+    const myPacks = assignments?.map(a => {
+        // Safety check: if video_packs is null (e.g., pack deleted), skip it
+        if (!a.video_packs) return null;
+        return {
+            ...a.video_packs,
+            video_count: a.video_packs.pack_videos?.[0]?.count || 0
+        };
+    }).filter(Boolean) || [];
 
     return (
         <div className="min-h-screen relative flex flex-col bg-slate-950">
