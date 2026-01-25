@@ -10,19 +10,32 @@ export default async function StudentDashboard() {
     if (!user) redirect('/login');
 
     // Fetch Packs assigned to this student
-    const { data: assignments } = await supabase
-        .from('student_packs')
-        .select('pack_id, video_packs(id, title, description, created_at, pack_videos(count))')
-        .eq('user_email', user.email);
+    let myPacks = [];
+    let errorMsg = null;
 
-    const myPacks = assignments?.map(a => {
-        // Safety check: if video_packs is null (e.g., pack deleted), skip it
-        if (!a.video_packs) return null;
-        return {
-            ...a.video_packs,
-            video_count: a.video_packs.pack_videos?.[0]?.count || 0
-        };
-    }).filter(Boolean) || [];
+    try {
+        const { data: assignments, error } = await supabase
+            .from('student_packs')
+            .select('pack_id, video_packs(id, title, description, created_at, pack_videos(count))')
+            .eq('user_email', user.email);
+
+        if (error) {
+            console.error('Error fetching packs:', error);
+            errorMsg = error.message;
+        } else {
+            myPacks = assignments?.map(a => {
+                // Safety check: if video_packs is null (e.g., pack deleted), skip it
+                if (!a.video_packs) return null;
+                return {
+                    ...a.video_packs,
+                    video_count: a.video_packs.pack_videos?.[0]?.count || 0
+                };
+            }).filter(Boolean) || [];
+        }
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        errorMsg = err.message;
+    }
 
     return (
         <div className="min-h-screen relative flex flex-col bg-slate-950">
@@ -68,7 +81,13 @@ export default async function StudentDashboard() {
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {myPacks.length === 0 ? (
+                    {errorMsg ? (
+                        <div className="col-span-full p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
+                            <h3 className="font-bold mb-2">Error Loading Classes</h3>
+                            <p>{errorMsg}</p>
+                            <p className="text-sm mt-2 opacity-70">Please contact support or try again later.</p>
+                        </div>
+                    ) : myPacks.length === 0 ? (
                         <div className="col-span-full flex flex-col items-center justify-center py-24 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
                             <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-4">
                                 <BookOpen className="w-10 h-10 text-slate-600" />
