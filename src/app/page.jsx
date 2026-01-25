@@ -1,169 +1,199 @@
 import Link from 'next/link';
-import { Trophy, ArrowRight, GraduationCap, Phone, CheckCircle2, Zap, Shield } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Youtube, Instagram, ArrowRight, BookOpen, GraduationCap, PlayCircle, Star, CheckCircle } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Home() {
     return (
-        <main className="min-h-screen relative overflow-hidden flex flex-col font-sans selection:bg-blue-500/30">
+        <div className="min-h-screen bg-white dark:bg-slate-950 font-sans transition-colors duration-300">
 
-            {/* Background Decoration (Adaptive) */}
-            <div className="absolute inset-0 -z-10 bg-base overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-900/10 dark:to-transparent opacity-70"></div>
-
-                {/* Blobs */}
-                <div className="absolute top-[10%] left-[10%] w-96 h-96 bg-blue-400/20 dark:bg-blue-600/10 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen"></div>
-                <div className="absolute top-[20%] right-[10%] w-96 h-96 bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen"></div>
-
-                {/* Grid Pattern */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
-            </div>
-
-            {/* Navbar */}
-            <nav className="w-full glass z-50 fixed top-0">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20">
-                            <GraduationCap className="h-6 w-6 text-white" />
+            {/* 1. Header / Menu Bar */}
+            <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                            <GraduationCap size={24} />
                         </div>
                         <div>
-                            <span className="block text-xl font-bold text-base-content tracking-tight leading-none">
-                                APEX <span className="text-blue-600 dark:text-blue-500">Institute</span>
-                            </span>
-                            <span className="text-[10px] text-muted uppercase tracking-widest font-bold">
-                                Excellence Redefined
-                            </span>
+                            <h1 className="text-xl font-bold text-slate-900 dark:text-white leading-none">APEX <span className="text-blue-600">Institute</span></h1>
+                            <p className="text-[10px] uppercase font-semibold text-slate-500 tracking-wider">Education Center</p>
                         </div>
                     </div>
+
+                    <nav className="hidden md:flex items-center gap-8">
+                        <Link href="#" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
+                        <Link href="#" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Classes</Link>
+                        <Link href="#" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Results</Link>
+                        <Link href="#" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</Link>
+                    </nav>
 
                     <div className="flex items-center gap-4">
                         <ThemeToggle />
-                        <Link href="/login" className="px-6 py-2.5 rounded-full text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-105 flex items-center gap-2">
-                            LMS Login <ArrowRight className="w-4 h-4" />
+                        <Link href="/login" className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold hover:opacity-90 transition-all">
+                            LMS Login <ArrowRight size={16} />
                         </Link>
                     </div>
                 </div>
-            </nav>
+            </header>
 
-            {/* Hero Section */}
-            <section className="flex-1 flex items-center justify-center pt-32 pb-20 px-6">
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-
-                    <div className="space-y-8 relative z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-base shadow-sm text-sm text-blue-600 dark:text-blue-400 font-semibold animate-fade-in-up">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                            </span>
-                            Admissions Open for 2026 Batch
-                        </div>
-
-                        <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight text-base-content tracking-tight">
-                            Smart Education <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                                For Everyone
-                            </span>
-                        </h1>
-
-                        <p className="text-lg text-muted max-w-xl leading-relaxed">
-                            The simplest, fastest, and most effective way to prepare for your A/L & O/L exams. Experience clean, distraction-free learning designed for results.
-                        </p>
-
-                        <div className="flex flex-wrap gap-4 pt-2">
-                            <Link href="/register" className="px-8 py-4 rounded-2xl bg-base-content text-surface font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all flex items-center gap-2 dark:bg-white dark:text-slate-900 invert-0">
-                                Join For Free
-                            </Link>
-                            <Link href="/login" className="px-8 py-4 rounded-2xl bg-surface border border-base text-base-content font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2 shadow-sm">
-                                View Courses
-                            </Link>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-6 pt-8 border-t border-base">
-                            <div>
-                                <h3 className="text-3xl font-bold text-base-content">500+</h3>
-                                <p className="text-sm text-muted font-medium">Free Lessons</p>
+            {/* 2. Hero Section */}
+            <section className="relative pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                        <div className="space-y-8 animate-fade-in-up">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-sm font-semibold">
+                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                2026 Advanced Level Enrollments Open
                             </div>
-                            <div>
-                                <h3 className="text-3xl font-bold text-base-content">24/7</h3>
-                                <p className="text-sm text-muted font-medium">Online Access</p>
-                            </div>
-                            <div>
-                                <h3 className="text-3xl font-bold text-base-content">10k+</h3>
-                                <p className="text-sm text-muted font-medium">Students</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="relative hidden lg:block">
-                        <div className="relative glass-card p-2 rounded-3xl transform rotate-2 hover:rotate-0 transition-duration-500 shadow-2xl">
-                            <img
-                                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2670&auto=format&fit=crop"
-                                alt="Sri Lankan Students"
-                                className="rounded-2xl w-full object-cover aspect-[4/5] filter contrast-105"
-                            />
+                            <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 dark:text-white leading-[1.1]">
+                                Master Your <br />
+                                <span className="text-blue-600">Future Today.</span>
+                            </h1>
 
-                            {/* Cards floating */}
-                            <div className="absolute top-12 -left-12 glass-card p-4 rounded-2xl flex items-center gap-4 animate-bounce shadow-xl bg-white/80 dark:bg-slate-800/80">
-                                <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl">
-                                    <Trophy className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
+                                Join the most trusted tuition class in Sri Lanka. Simplified theory, targeted revision, and guaranteed results for focused students.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Link href="/register" className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-600/20 hover:-translate-y-1 transition-transform text-center">
+                                    Join Now
+                                </Link>
+                                <Link href="/login" className="px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-center flex items-center justify-center gap-2">
+                                    <PlayCircle size={20} /> Watch Free Lessons
+                                </Link>
+                            </div>
+
+                            <div className="flex items-center gap-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex -space-x-4">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800" />
+                                    ))}
                                 </div>
                                 <div>
-                                    <p className="font-bold text-base-content">Island Rank 1</p>
-                                    <p className="text-xs text-muted">Target Excellence</p>
+                                    <p className="font-bold text-slate-900 dark:text-white">1000+ Students</p>
+                                    <div className="flex text-yellow-500 gap-0.5" size={12}>
+                                        <Star size={14} fill="currentColor" />
+                                        <Star size={14} fill="currentColor" />
+                                        <Star size={14} fill="currentColor" />
+                                        <Star size={14} fill="currentColor" />
+                                        <Star size={14} fill="currentColor" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        {/* Hero Image */}
+                        <div className="relative mx-auto lg:ml-auto w-full max-w-md lg:max-w-full">
+                            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 rotate-2 hover:rotate-0 transition-transform duration-500">
+                                <img
+                                    src="/tution_master.png"
+                                    alt="Tuition Master"
+                                    className="w-full h-auto object-cover"
+                                />
+
+                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-24 text-white">
+                                    <p className="text-xl font-bold">Mr. Kasun Perera</p>
+                                    <p className="text-sm opacity-80">B.Sc. (Hons) University of Colombo</p>
+                                </div>
+                            </div>
+                            {/* Decorative Blob */}
+                            <div className="absolute -top-10 -right-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
+                            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            {/* Features Simple Grid */}
-            <section className="py-24 bg-surface">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16 max-w-2xl mx-auto">
-                        <h2 className="text-3xl font-bold text-base-content mb-4">Why Tution.LK?</h2>
-                        <p className="text-muted text-lg">Simple. Fast. Effective. Everything you need without the clutter.</p>
+            {/* 3. Features Area */}
+            <section className="py-20 bg-slate-50 dark:bg-slate-900/50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center max-w-2xl mx-auto mb-16">
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Why Choose Us?</h2>
+                        <p className="text-slate-600 dark:text-slate-400">We provide the best learning environment with advanced facilities to ensure your success.</p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
-                        {[
-                            { icon: Zap, title: "Lightning Fast", desc: "Optimized for low bandwidth connections across Sri Lanka.", color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-900/10" },
-                            { icon: CheckCircle2, title: "Clear Curriculum", desc: "Structured lessons that cover the entire local syllabus.", color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-900/10" },
-                            { icon: Shield, title: "Secure Platform", desc: "Your data and progress are always safe with us.", color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-900/10" },
-                        ].map((feature, i) => (
-                            <div key={i} className="p-8 rounded-3xl bg-base border border-base hover:shadow-lg transition-all">
-                                <div className={`p-4 rounded-2xl w-fit mb-6 ${feature.bg} ${feature.color}`}>
-                                    <feature.icon className="w-8 h-8" />
-                                </div>
-                                <h3 className="text-xl font-bold text-base-content mb-3">{feature.title}</h3>
-                                <p className="text-muted leading-relaxed">
-                                    {feature.desc}
-                                </p>
+                        {/* Card 1 */}
+                        <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-xl flex items-center justify-center mb-6">
+                                <BookOpen size={24} />
                             </div>
-                        ))}
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Complete Syllabus</h3>
+                            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Comprehensive coverage of the entire curriculum with detailed tutes and practical examples.
+                            </p>
+                        </div>
+                        {/* Card 2 */}
+                        <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
+                                <CheckCircle size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Targeted Revision</h3>
+                            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Special revision sessions focusing on past papers and model questions to boost exam confidence.
+                            </p>
+                        </div>
+                        {/* Card 3 */}
+                        <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-xl flex items-center justify-center mb-6">
+                                <PlayCircle size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">LMS Recordings</h3>
+                            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Missed a class? Watch high-quality recordings anytime through our secure LMS portal.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Simple Footer */}
-            <footer className="py-12 border-t border-base bg-base">
-                <div className="max-w-5xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
-                    <div className="flex items-center gap-2 font-bold text-2xl text-base-content">
-                        <GraduationCap className="w-6 h-6 text-blue-600" />
-                        APEX Institute
+            {/* 4. Footer */}
+            <footer className="bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-900 pt-16 pb-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid md:grid-cols-4 gap-12 mb-12">
+                        <div className="col-span-2">
+                            <div className="flex items-center gap-2 mb-4">
+                                <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">
+                                    <GraduationCap size={18} />
+                                </div>
+                                <span className="text-xl font-bold text-slate-900 dark:text-white">APEX Institute</span>
+                            </div>
+                            <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">
+                                Empowering the next generation of Sri Lankan leaders through quality education and discipline.
+                            </p>
+                            <div className="flex gap-4">
+                                <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-blue-600 hover:text-white transition-colors"><Facebook size={20} /></a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-red-600 hover:text-white transition-colors"><Youtube size={20} /></a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-pink-600 hover:text-white transition-colors"><Instagram size={20} /></a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="font-bold text-slate-900 dark:text-white mb-4">Quick Links</h4>
+                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li><Link href="#" className="hover:text-blue-600">Classes</Link></li>
+                                <li><Link href="#" className="hover:text-blue-600">Timetable</Link></li>
+                                <li><Link href="#" className="hover:text-blue-600">Downloads</Link></li>
+                                <li><Link href="/login" className="hover:text-blue-600">LMS Login</Link></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="font-bold text-slate-900 dark:text-white mb-4">Contact Us</h4>
+                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li className="flex items-center gap-3"><Phone size={16} /> 077 123 4567</li>
+                                <li className="flex items-center gap-3"><Mail size={16} /> info@apextution.lk</li>
+                                <li className="flex items-center gap-3"><MapPin size={16} /> No. 123, Main Street, Gampaha</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div className="flex gap-6 text-sm text-muted font-medium">
-                        <Link href="#" className="hover:text-blue-500">Terms</Link>
-                        <Link href="#" className="hover:text-blue-500">Privacy</Link>
-                        <Link href="#" className="hover:text-blue-500">Contact</Link>
+                    <div className="pt-8 border-t border-slate-100 dark:border-slate-900 text-center">
+                        <p className="text-sm text-slate-500">© {new Date().getFullYear()} APEX Institute. All rights reserved.</p>
                     </div>
-
-                    <p className="text-muted text-sm border-t border-base pt-6 w-full max-w-md">
-                        © {new Date().getFullYear()} All rights reserved. Made for SL Students.
-                    </p>
                 </div>
             </footer>
-        </main>
+
+        </div>
     );
 }
