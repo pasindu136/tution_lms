@@ -21,29 +21,19 @@ export default function PackContentManager({ pack, packVideos }) {
         e.preventDefault();
         setLoading(true);
         try {
-            // 1. Create Video
+            // 1. Create Video directly in the pack
             const createRes = await fetch('/api/admin/videos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(videoData)
+                body: JSON.stringify({ ...videoData, pack_id: pack.id })
             });
 
             if (!createRes.ok) throw new Error('Failed to create video');
             const video = await createRes.json(); // Assuming API now returns the created video object
 
-            // 2. Link to Pack (API needs to support returning video object to do this immediately)
-            // Since our current add-video API might not return the ID, we might need to adjust it or fetch it.
-            // Let's assume we update the API to return the video details.
-
-            await fetch('/api/admin/packs/content', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    packId: pack.id,
-                    videoId: video.data[0].id, // Check structure of response
-                    action: 'add'
-                })
-            });
+            // 2. Link to Pack - REMOVED (Handled by create with pack_id)
+            // In the new schema, videos are created directly in pack_videos table with pack_id.
+            // No separate linking step is required.
 
             // Reset
             setVideoData({ title: '', description: '', youtube_url: '', category: 'Lecture' });
@@ -95,7 +85,7 @@ export default function PackContentManager({ pack, packVideos }) {
                     </div>
                 ) : (
                     <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-                        {packVideos.map(({ videos: video }) => (
+                        {packVideos.map((video) => (
                             <div key={video.id} className="p-4 flex items-center justify-between border-b border-slate-700 last:border-0 hover:bg-slate-700/30">
                                 <div className="flex items-center gap-4">
                                     <div className="relative w-24 aspect-video bg-black rounded overflow-hidden hidden sm:block">
@@ -103,16 +93,19 @@ export default function PackContentManager({ pack, packVideos }) {
                                     </div>
                                     <div>
                                         <p className="font-medium text-white">{video.title}</p>
-                                        <p className="text-xs text-slate-400">{video.category} • {new Date(video.created_at).toLocaleDateString()}</p>
+                                        <p className="text-xs text-slate-400">{video.category || 'Lecture'} • {new Date(video.created_at).toLocaleDateString()}</p>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => handleRemoveVideo(video.id)}
-                                    className="p-2 text-red-400 hover:bg-red-500/10 rounded transition"
-                                    title="Remove from pack"
-                                >
-                                    <Trash className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    {/* Edit Button Placeholder - logic to be added if needed, for now focusing on Delete */}
+                                    <button
+                                        onClick={() => handleRemoveVideo(video.id)}
+                                        className="p-2 text-red-400 hover:bg-red-500/10 rounded transition"
+                                        title="Delete video"
+                                    >
+                                        <Trash className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>

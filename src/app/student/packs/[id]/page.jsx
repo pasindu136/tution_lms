@@ -37,10 +37,10 @@ export default async function PackVideosPage({ params }) {
     // Fetch Videos in Pack
     const { data: videos } = await supabase
         .from('pack_videos')
-        .select('videos(*)')
+        .select('*')
         .eq('pack_id', id);
 
-    const content = videos?.map(v => v.videos) || [];
+    const content = videos || [];
 
     return (
         <div className="min-h-screen relative flex flex-col">

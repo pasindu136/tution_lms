@@ -22,7 +22,7 @@ export default async function ManagePackDetailsPage({ params }) {
     // Fetch Videos ALREADY in this pack
     const { data: packVideos } = await supabase
         .from('pack_videos')
-        .select('*, videos(*)') // Join with videos table
+        .select('*') // Direct selection, no join needed as this table holds the video data
         .eq('pack_id', id);
 
     if (!pack) return <div className="text-white p-10">Pack not found</div>;

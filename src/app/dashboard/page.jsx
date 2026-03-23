@@ -5,14 +5,21 @@ import Link from 'next/link';
 import { Plus, Video, Users, Layers } from 'lucide-react';
 import LogoutButton from '@/components/LogoutButton';
 import { supabase } from '@/lib/supabaseClient';
+import DeleteVideoButton from '@/components/DeleteVideoButton';
 
 export default async function Dashboard() {
     const user = await getCurrentUser();
     if (!user || user.role !== 'admin') redirect('/login');
 
+    // List all videos from all packs (Since we moved to a Pack-based system)
     const { data: videos, error } = await supabase
-        .from('videos')
-        .select('*')
+        .from('pack_videos')
+        .select(`
+            *,
+            video_packs (
+                title
+            )
+        `)
         .order('created_at', { ascending: false });
 
     if (error) console.error("Error loading videos:", error);
@@ -67,7 +74,7 @@ export default async function Dashboard() {
                         <thead>
                             <tr className="bg-slate-900/50 text-slate-400 text-sm border-b border-slate-700">
                                 <th className="p-4 font-medium">Video Title</th>
-                                <th className="p-4 font-medium">Category</th>
+                                <th className="p-4 font-medium">Pack</th>
                                 <th className="p-4 font-medium">Added On</th>
                                 <th className="p-4 font-medium">YouTube ID</th>
                                 <th className="p-4 font-medium text-right">Actions</th>
@@ -78,13 +85,15 @@ export default async function Dashboard() {
                                 <tr key={video.id} className="hover:bg-slate-700/30 transition">
                                     <td className="p-4 font-medium text-white">{video.title}</td>
                                     <td className="p-4">
-                                        <span className="bg-slate-700 px-2 py-1 rounded text-xs">{video.category || 'General'}</span>
+                                        <span className="bg-slate-700 px-2 py-1 rounded text-xs">
+                                            {video.video_packs?.title || 'Unassigned'}
+                                        </span>
                                     </td>
                                     <td className="p-4">{new Date(video.created_at).toLocaleDateString()}</td>
                                     <td className="p-4 font-mono text-xs text-slate-500">{video.youtube_id}</td>
                                     <td className="p-4 text-right">
                                         <button className="text-blue-400 hover:text-blue-300 mr-3">Edit</button>
-                                        <button className="text-red-400 hover:text-red-300">Delete</button>
+                                        <DeleteVideoButton videoId={video.id} title={video.title} />
                                     </td>
                                 </tr>
                             ))}

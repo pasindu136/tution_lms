@@ -14,39 +14,29 @@ export default async function WatchVideoPage({ params }) {
 
     // Fetch Video (Need to check if user has access to a pack containing this video)
     const { data: video } = await supabase
-        .from('videos')
+        .from('pack_videos')
         .select('*')
         .eq('id', id)
         .single();
 
-    if (!video) notFound();
-
-    // Check Access: Does the user have a pack that contains this video?
-    // 1. Get packs containing this video
-    const { data: packVideos } = await supabase
-        .from('pack_videos')
-        .select('pack_id')
-        .eq('video_id', id);
-
-    const packIdsToCheck = packVideos?.map(pv => pv.pack_id) || [];
-
-    // 2. Check strict access (Only allows watching if in an assigned pack)
-    // If packIdsToCheck is empty, it means the video is not in any pack, so maybe allow or deny? 
-    // Let's Assume DENY if not in a pack or user doesn't have the pack.
+    if (!video) return notFound();
 
     let hasAccess = false;
-    if (packIdsToCheck.length > 0) {
+    
+    // NOTE: For Admin/Teacher, always allow
+    if (user.role === 'admin' || user.role === 'teacher') {
+        hasAccess = true;
+    } else {
+        // Check Access: Does the user have this pack assigned?
         const { data: access } = await supabase
             .from('student_packs')
             .select('id')
             .eq('user_email', user.email)
-            .in('pack_id', packIdsToCheck);
+            .eq('pack_id', video.pack_id)
+            .single();
 
-        if (access && access.length > 0) hasAccess = true;
+        if (access) hasAccess = true;
     }
-
-    // NOTE: For Admin/Teacher, always allow
-    if (user.role === 'admin' || user.role === 'teacher') hasAccess = true;
 
     if (!hasAccess) {
         return (
@@ -76,8 +66,8 @@ export default async function WatchVideoPage({ params }) {
 
                 <div className="prose prose-invert max-w-none">
                     <h1 className="text-2xl font-bold text-white mb-2">{video.title}</h1>
-                    <div className="flex gap-4 text-sm text-slate-500 mb-6 border-b border-slate-800 pb-4">
-                        <span>{video.category}</span>
+                    <div className="flex gap-3 text-sm text-slate-500 mb-6 border-b border-slate-800 pb-4 items-center">
+                        <span className="font-medium text-slate-400 border border-slate-700 bg-slate-800 px-2 py-0.5 rounded text-xs">{video.category || 'Lecture'}</span>
                         <span>•</span>
                         <span>{new Date(video.created_at).toLocaleDateString()}</span>
                     </div>

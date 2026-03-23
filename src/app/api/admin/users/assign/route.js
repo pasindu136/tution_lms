@@ -15,7 +15,14 @@ export async function POST(req) {
             const { error } = await supabase
                 .from('student_packs')
                 .insert([{ user_email: email, pack_id: packId }]);
-            if (error) throw error;
+            
+            if (error) {
+                // If it's a unique constraint violation (duplicate key)
+                if (error.code === '23505') {
+                    return NextResponse.json({ message: 'Student is already assigned to this pack' }, { status: 400 });
+                }
+                throw error;
+            }
         }
 
         if (action === 'remove') {
@@ -28,6 +35,7 @@ export async function POST(req) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
+        console.error("Assignment error:", error);
         return NextResponse.json({ message: 'Error updating assignment' }, { status: 500 });
     }
 }

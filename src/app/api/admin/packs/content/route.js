@@ -11,18 +11,15 @@ export async function POST(req) {
     try {
         const { packId, videoId, action } = await req.json();
 
-        if (action === 'add') {
-            const { error } = await supabase
-                .from('pack_videos')
-                .insert([{ pack_id: packId, video_id: videoId }]);
-            if (error) throw error;
-        }
-
         if (action === 'remove') {
+            // In the new schema, "Removing" a video from a pack means DELETING the video itself
+            // because videos are strictly children of packs (pack_videos table).
+            // videoId here effectively is the PRIMARY KEY ID of the pack_videos record.
             const { error } = await supabase
                 .from('pack_videos')
                 .delete()
-                .match({ pack_id: packId, video_id: videoId });
+                .eq('id', videoId); // Match by Primary Key
+
             if (error) throw error;
         }
 

@@ -11,10 +11,10 @@ export async function POST(req) {
     }
 
     try {
-        const { title, description, youtube_url, category } = await req.json();
+        const { title, description, youtube_url, category, pack_id } = await req.json();
 
-        if (!title || !youtube_url) {
-            return NextResponse.json({ message: 'Title and YouTube URL are required' }, { status: 400 });
+        if (!title || !youtube_url || !pack_id) {
+            return NextResponse.json({ message: 'Title, YouTube URL, and Pack ID are required' }, { status: 400 });
         }
 
         // Basic extraction of ID from URL
@@ -34,10 +34,12 @@ export async function POST(req) {
             return NextResponse.json({ message: 'Invalid YouTube URL' }, { status: 400 });
         }
 
+        // Note: 'category' is not in the new schema for pack_videos, it's implied by the pack. 
+        // We can ignore it or add it if schema changes, but for now ignoring.
         const { data, error } = await supabase
-            .from('videos')
+            .from('pack_videos')
             .insert([
-                { title, description, youtube_id, category }
+                { title, description, youtube_id, pack_id, category: category || 'Lecture' }
             ])
             .select(); // IMPORTANT: Return the created record
 
